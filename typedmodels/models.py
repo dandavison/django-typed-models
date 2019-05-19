@@ -137,7 +137,8 @@ class TypedModelMetaclass(ModelBase):
             typ = "%s.%s" % (opts.app_label, model_name)
             cls._typedmodels_type = typ
             cls._typedmodels_subtypes = [typ]
-            if typ in base_class._typedmodels_registry:
+            registry_entry = base_class._typedmodels_registry.get(typ)
+            if registry_entry and registry_entry.__name__ != cls.__name__:
                 raise ValueError(
                     "Can't register type %r to %r (already registered to %r)" % (
                         typ, classname, base_class._typedmodels_registry[typ].__name__
